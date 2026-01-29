@@ -1,6 +1,9 @@
 # Chicken Direct
+## Backend Final Exam 2025 (Grade: A)
+---
 
 Chicken Direct is a Spring Boot 4 REST API with PostgreSQL, Flyway migrations and Thymeleaf views.
+
 This README explains how to run the app locally using Docker for the database.
 
 ---
