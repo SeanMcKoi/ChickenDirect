@@ -1,0 +1,986 @@
+{
+	"info": {
+		"_postman_id": "66e9e352-89d0-409e-b788-2419632b6257",
+		"name": "ChickenDirect - Collection",
+		"description": "Unified collection for Customers, Addresses, Orders, and Products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23812835"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 201 Created\", function () { pm.response.to.have.status(201); });",
+									"",
+									"// Save productId",
+									"const json = pm.response.json();",
+									"if (json.id) { pm.collectionVariables.set('productId', json.id); console.log('productId set:', json.id); }"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Chicken Breast\",\n  \"description\": \"Fresh organic chicken breast\",\n  \"price\": 99.90,\n  \"status\": \"IN_STOCK\",\n  \"quantityOnHand\": 150\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () { pm.response.to.have.status(200); });"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Chicken Breast\",\n  \"description\": \"Premium fresh chicken breast\",\n  \"price\": 119.90,\n  \"status\": \"IN_STOCK\",\n  \"quantityOnHand\": 200\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 204 No Content\", function () { pm.response.to.have.status(204); });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/{{productId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"CustomerResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('name');",
+									"    pm.expect(json).to.have.property('phone');",
+									"    pm.expect(json).to.have.property('email');",
+									"});",
+									"",
+									"// Save customerId",
+									"try {",
+									"  const json = pm.response.json();",
+									"  if (json.id) {",
+									"    pm.collectionVariables.set('customerId', json.id);",
+									"    console.log('customerId set to', json.id);",
+									"  }",
+									"} catch (e) {",
+									"  console.warn('Could not parse response JSON to set customerId', e);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Bob Lazard\",\n  \"phone\": \"+47 12345678\",\n  \"email\": \"bob@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"CustomerResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('name');",
+									"    pm.expect(json).to.have.property('phone');",
+									"    pm.expect(json).to.have.property('email');",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{customerId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(Array.isArray(json)).to.be.true;",
+									"});",
+									"",
+									"// Optionally update customerId from first element",
+									"// try {",
+									"//  const json = pm.response.json();",
+									"//  if (Array.isArray(json) && json.length > 0 && json[0].id) {",
+									"//    pm.collectionVariables.set('customerId', json[0].id);",
+									"//    console.log('customerId updated to', json[0].id);",
+									"//  }",
+									"//} catch (e) {",
+									"//  console.warn('Could not parse response JSON', e);",
+									"//}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Customer was updated\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.name).to.eql('Updated Bob');",
+									"    pm.expect(json.phone).to.eql('+47 99999999');",
+									"    pm.expect(json.email).to.eql('updated.bob@example.com');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Bob\",\n  \"phone\": \"+47 99999999\",\n  \"email\": \"updated.bob@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{customerId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 204 No Content\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{customerId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Create Address for Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"AddressResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('street');",
+									"    pm.expect(json).to.have.property('city');",
+									"    pm.expect(json).to.have.property('postalCode');",
+									"    pm.expect(json).to.have.property('country');",
+									"});",
+									"",
+									"// Save addressId and shippingAddressId",
+									"try {",
+									"  const json = pm.response.json();",
+									"  if (json.id) {",
+									"    pm.collectionVariables.set('addressId', json.id);",
+									"    pm.collectionVariables.set('shippingAddressId', json.id);",
+									"    console.log('addressId/shippingAddressId set to', json.id);",
+									"  }",
+									"} catch (e) {",
+									"  console.warn('Could not parse response JSON to set addressId', e);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"street\": \"Example Street 1\",\n    \"city\": \"Oslo\",\n    \"postalCode\": \"0150\",\n    \"country\": \"Norway\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{addressCustomerId}}/addresses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{addressCustomerId}}",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Address for Customer Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"AddressResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('street');",
+									"    pm.expect(json).to.have.property('city');",
+									"    pm.expect(json).to.have.property('postalCode');",
+									"    pm.expect(json).to.have.property('country');",
+									"});",
+									"",
+									"// Save addressId and shippingAddressId",
+									"try {",
+									"  const json = pm.response.json();",
+									"  if (json.id) {",
+									"    pm.collectionVariables.set('addressId', json.id);",
+									"    pm.collectionVariables.set('shippingAddressId', json.id);",
+									"    console.log('addressId/shippingAddressId set to', json.id);",
+									"  }",
+									"} catch (e) {",
+									"  console.warn('Could not parse response JSON to set addressId', e);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"street\": \"Example Street 2\",\n    \"city\": \"Oslo\",\n    \"postalCode\": \"0150\",\n    \"country\": \"Norway\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{addressCustomerId}}/addresses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{addressCustomerId}}",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Addresses for Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(Array.isArray(json)).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{addressCustomerId}}/addresses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{addressCustomerId}}",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Address was updated\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.street).to.eql('Updated Street 2');",
+									"    pm.expect(json.city).to.eql('Bergen');",
+									"    pm.expect(json.postalCode).to.eql('5003');",
+									"    pm.expect(json.country).to.eql('Norway');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"street\": \"Updated Street 2\",\n  \"city\": \"Bergen\",\n  \"postalCode\": \"5003\",\n  \"country\": \"Norway\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{addressCustomerId}}/addresses/{{addressId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{addressCustomerId}}",
+								"addresses",
+								"{{addressId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 204 No Content\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers/{{addressCustomerId}}/addresses/{{addressId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"{{addressCustomerId}}",
+								"addresses",
+								"{{addressId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"OrderResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('customer');",
+									"    pm.expect(json).to.have.property('shippingStreet');",
+									"    pm.expect(json).to.have.property('shippingCity');",
+									"    pm.expect(json).to.have.property('shippingPostalCode');",
+									"    pm.expect(json).to.have.property('shippingCountry');",
+									"    pm.expect(json).to.have.property('totalPrice');",
+									"    pm.expect(json).to.have.property('shippingCharge');",
+									"    pm.expect(json).to.have.property('isShipped');",
+									"    pm.expect(json).to.have.property('creationDate');",
+									"    pm.expect(json).to.have.property('items');",
+									"});",
+									"",
+									"// Save orderId",
+									"try {",
+									"  const json = pm.response.json();",
+									"  if (json.id) {",
+									"    pm.collectionVariables.set('orderId', json.id);",
+									"    console.log('orderId set to', json.id);",
+									"  }",
+									"} catch (e) {",
+									"  console.warn('Could not parse response JSON to set orderId', e);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": {{addressCustomerId}},\n    \"shippingAddressId\": {{orderShippingAddressId}},\n    \"totalPrice\": 599.00,\n    \"shippingCharge\": 49.00,\n    \"isShipped\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"OrderResponse has expected fields\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('id');",
+									"    pm.expect(json).to.have.property('customer');",
+									"    pm.expect(json).to.have.property('shippingStreet');",
+									"    pm.expect(json).to.have.property('shippingCity');",
+									"    pm.expect(json).to.have.property('shippingPostalCode');",
+									"    pm.expect(json).to.have.property('shippingCountry');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/{{orderId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(Array.isArray(json)).to.be.true;",
+									"});",
+									"",
+									"// Optionally update orderId from first element",
+									"// try {",
+									"//  const json = pm.response.json();",
+									"//  if (Array.isArray(json) && json.length > 0 && json[0].id) {",
+									"//    pm.collectionVariables.set('orderId', json[0].id);",
+									"//    console.log('orderId updated to', json[0].id);",
+									"//  }",
+									"//} catch (e) {",
+									"//  console.warn('Could not parse response JSON', e);",
+									"//}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Order fields updated correctly\", function () {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.totalPrice).to.eql(799.00);",
+									"    pm.expect(json.shippingCharge).to.eql(59.00);",
+									"    pm.expect(json.isShipped).to.eql(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"totalPrice\": 799.00,\n  \"shippingCharge\": 59.00,\n  \"isShipped\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/{{orderId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status is 204 No Content\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/{{orderId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api"
+		},
+		{
+			"key": "customerId",
+			"value": "23"
+		},
+		{
+			"key": "addressId",
+			"value": "25"
+		},
+		{
+			"key": "shippingAddressId",
+			"value": "25"
+		},
+		{
+			"key": "orderId",
+			"value": 2
+		},
+		{
+			"key": "productId",
+			"value": 35
+		},
+		{
+			"key": "addressCustomerId",
+			"value": "1"
+		},
+		{
+			"key": "orderShippingAddressId",
+			"value": "1"
+		}
+	]
+}

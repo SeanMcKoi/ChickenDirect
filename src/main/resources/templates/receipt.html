@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Receipt</title>
+    <style>
+        :root {
+            --bg: #050816;
+            --card: #cfcfcf;
+            --card-alt: #8a8a8a;
+            --text-main: #111111;
+            --text-muted: #333333;
+            --accent: #fbbf24;
+            --border-subtle: #555555;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .receipt-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #ffffff 0%, var(--card) 40%, #bcbcbc 100%);
+            padding: 2rem 2.5rem;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55),
+            0 0 0 4px var(--accent);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.75rem;
+            gap: 1.5rem;
+        }
+
+        .header-left {
+            color: var(--text-main);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .meta {
+            margin-top: 0.35rem;
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .meta .value {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+        }
+
+        .section-title::after {
+            content: "";
+            display: inline-block;
+            margin-left: 0.5rem;
+            width: 128px;
+            height: 6px;
+            background: linear-gradient(to right, var(--accent), transparent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-alt);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid #777;
+            color: var(--text-main);
+        }
+
+        .muted {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.6rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-alt);
+            color: var(--text-main);
+        }
+
+        thead {
+            background: linear-gradient(to right, #bcbcbc, #8a8a8a);
+        }
+
+        th, td {
+            padding: 0.65rem 0.7rem;
+            border-bottom: 1px solid #777;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.25); /* readable hover */
+        }
+
+        .product-name {
+            font-weight: 600;
+        }
+
+        .product-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .totals {
+            margin-top: 1.4rem;
+            width: 100%;
+        }
+
+        .totals td {
+            border: none;
+            padding: 0.35rem 0;
+            font-size: 0.95rem;
+        }
+
+        .totals .label {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding-right: 0.75rem;
+        }
+
+        .totals .value {
+            text-align: right;
+            width: 160px;
+            padding-right: 1.25rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .grand-total {
+            color: var(--accent);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .brand-icon {
+            width: 26px;
+            height: 26px;
+        }
+
+        .brand-text {
+            color: var(--accent);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.085em;
+            font-weight: 700;
+            font-style: oblique;
+            text-decoration: underline wavy #ff6700;
+        }
+
+        .footer-note {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="receipt-container">
+    <div class="header">
+        <div class="header-left">
+            <div class="brand-row">
+                <img src="/favicon.ico" alt="Chicken Logo" class="brand-icon">
+                <span class="brand-text">Chicken Direct</span>
+            </div>
+
+            <h1>Order Receipt</h1>
+
+            <div class="meta">
+                Order #
+                <span class="value" th:text="${order.id}"></span><br/>
+                Date:
+                <span class="value"
+                      th:text="${#temporals.format(order.creationDate, 'dd.MM.yyyy HH:mm')}"></span>
+            </div>
+        </div>
+
+        <div>
+            <span class="badge"
+                  th:classappend="${order.isShipped} ? ' badge-shipped' : ' badge-pending'"
+                  th:text="${order.isShipped} ? 'Order on its way!' : 'Order received.'">
+                <span class="badge-dot"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="section-title">Customer & Delivery</div>
+    <div class="grid">
+        <div class="card">
+            <div class="muted">Customer</div>
+            <div th:text="${order.customer.name}"></div>
+            <div class="muted" th:text="${order.customer.email}"></div>
+        </div>
+        <div class="card">
+            <div class="muted">Shipping Address</div>
+            <div th:text="${order.shippingStreet}"></div>
+            <div th:text="${order.shippingPostalCode + ' ' + order.shippingCity}"></div>
+            <div class="muted" th:text="${order.shippingCountry}"></div>
+        </div>
+    </div>
+
+    <div class="section-title">Order</div>
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th class="text-right">Quantity</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td>
+                <div class="product-name" th:text="${item.product.name}"></div>
+                <div class="product-desc" th:text="${item.product.description}"></div>
+            </td>
+            <td class="text-right" th:text="${item.quantity}"></td>
+            <td class="text-right" th:text="${'kr ' + item.product.price}"></td>
+            <td class="text-right" th:text="${'kr ' + item.lineTotal}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="totals">
+        <tr>
+            <td class="label">Products:</td>
+            <td class="value" th:text="${'kr ' + order.totalPrice.subtract(order.shippingCharge)}"></td>
+        </tr>
+        <tr>
+            <td class="label">Shipping:</td>
+            <td class="value" th:text="${'kr ' + order.shippingCharge}"></td>
+        </tr>
+        <tr>
+            <td class="label">Total:</td>
+            <td class="value grand-total" th:text="${'kr ' + order.totalPrice}"></td>
+        </tr>
+    </table>
+
+    <div class="footer-note">
+        Thank you for choosing Chicken Direct! 🐔
+    </div>
+</div>
+</body>
+</html>
